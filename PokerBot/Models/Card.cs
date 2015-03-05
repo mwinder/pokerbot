@@ -1,21 +1,45 @@
 ﻿using System;
 
-namespace PokerBot
+namespace PokerBot.Models
 {
     public class Card
     {
-        private readonly string card;
+        public static readonly Card Two = new Card("2");
+        public static readonly Card Three = new Card("3");
+        public static readonly Card Four = new Card("4");
+        public static readonly Card Five = new Card("5");
+        public static readonly Card Six = new Card("6");
+        public static readonly Card Seven = new Card("7");
+        public static readonly Card Eight = new Card("8");
+        public static readonly Card Nine = new Card("9");
+        public static readonly Card Ten = new Card("T");
+        public static readonly Card Jack = new Card("J");
+        public static readonly Card Queen = new Card("Q");
+        public static readonly Card King = new Card("K");
+        public static readonly Card Ace = new Card("A");
+
+        public readonly string Id;
 
         public Card(string card)
         {
-            this.card = card;
+            Id = card;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+
+            var other = obj as Card;
+            if (other == null) return false;
+
+            return Id == other.Id;
         }
 
         public int Weighting
         {
             get
             {
-                switch (card)
+                switch (Id)
                 {
                     case "2":
                         return 0;

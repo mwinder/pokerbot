@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using PokerBot.Models;
 
 namespace PokerBot.Tests
 {
@@ -36,7 +37,7 @@ namespace PokerBot.Tests
         {
             var game = new Game("Opponent", 100, 300);
 
-            Assert.AreEqual("A", game.Card("A"));
+            Assert.AreEqual(Card.Ace, game.Card(new Card("A")));
         }
 
         [Test]
@@ -44,7 +45,7 @@ namespace PokerBot.Tests
         {
             var game = new Game("Opponent", 100, 300);
 
-            game.Card("A");
+            game.Card(new Card("A"));
 
             Assert.AreEqual("BET:5", game.Move());
         }
@@ -54,7 +55,7 @@ namespace PokerBot.Tests
         {
             var game = new Game("Opponent", 100, 300);
 
-            game.Card("3");
+            game.Card(new Card("3"));
 
             Assert.AreEqual("CALL", game.Move());
         }

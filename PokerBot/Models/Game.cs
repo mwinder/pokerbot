@@ -1,4 +1,5 @@
 ﻿using System;
+using PokerBot.Models;
 
 namespace PokerBot
 {
@@ -12,7 +13,7 @@ namespace PokerBot
         private bool button;
         private bool blind;
 
-        private string card;
+        private Card card;
 
         private string opponentCard;
         private string opponentMove;
@@ -35,7 +36,7 @@ namespace PokerBot
             return blind = true;
         }
 
-        public string Card(string value)
+        public Card Card(Card value)
         {
             return card = value;
         }
@@ -53,7 +54,7 @@ namespace PokerBot
         // FOLD, CALL, BET, BET:X
         public string Move()
         {
-            switch (card)
+            switch (card.Id)
             {
                 case "2":
                 case "3":

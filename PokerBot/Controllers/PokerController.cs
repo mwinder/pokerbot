@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using log4net;
+using PokerBot.Models;
 
 namespace PokerBot.Controllers
 {
@@ -35,7 +36,7 @@ namespace PokerBot.Controllers
                     game.PostBlind();
                     break;
                 case "CARD":
-                    game.Card(data);
+                    game.Card(new Card(data));
                     break;
                 case "OPPONENT_MOVE":
                     game.OpponentMove(data);
@@ -47,7 +48,7 @@ namespace PokerBot.Controllers
                     game.ReceiveChips(Convert.ToInt32(data));
                     break;
                 case "GAME_OVER":
-                    log.InfoFormat("Game result: {0} chips = {1}", game.Result(), game.Chips);
+                    log.InfoFormat("Game result: {0} against '{1}' chips = {2}", game.Result(), game.Opponent, game.Chips);
                     break;
             }
         }
