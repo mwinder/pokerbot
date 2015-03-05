@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Text.RegularExpressions;
+using NUnit.Framework;
 using PokerBot.Models;
 
 namespace PokerBot.Tests
@@ -47,7 +48,7 @@ namespace PokerBot.Tests
 
             game.Card(new Card("A"));
 
-            Assert.AreEqual("BET:5", game.Move());
+            Assert.AreEqual("BET:1000", game.Move());
         }
 
         [Test]
@@ -58,6 +59,13 @@ namespace PokerBot.Tests
             game.Card(new Card("3"));
 
             Assert.AreEqual("CALL", game.Move());
+        }
+
+        [Test]
+        public void ReadBet()
+        {
+            Assert.AreEqual("10", Regex.Replace("BET:10", @"BET:(\d)", "$1"));
+            Assert.AreEqual("10", Regex.Replace("BET", @"BET:(\d)", "$1"));
         }
     }
 }

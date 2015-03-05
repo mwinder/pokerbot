@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using PokerBot.Models;
 
 namespace PokerBot
@@ -18,6 +19,8 @@ namespace PokerBot
         private string opponentCard;
         private string opponentMove;
 
+        private int currentBet = 2;
+
         public Game(string opponent, int chips, int handLimit)
         {
             Opponent = opponent;
@@ -33,6 +36,7 @@ namespace PokerBot
 
         public bool PostBlind()
         {
+            Chips -= 1;
             return blind = true;
         }
 
@@ -48,8 +52,17 @@ namespace PokerBot
 
         public string OpponentMove(string move)
         {
+            const string raisePattern = @"BET:(\d)";
+            if (Regex.IsMatch(move, raisePattern))
+            {
+                var raise = Convert.ToInt32(Regex.Replace(move, raisePattern, "$1"));
+                currentBet += raise;
+            }
+
             return opponentMove = move;
         }
+
+        private int remainingBets = 20;
 
         // FOLD, CALL, BET, BET:X
         public string Move()
@@ -58,46 +71,55 @@ namespace PokerBot
             {
                 case "2":
                 case "3":
+                    return Fold();
                 case "4":
-                    BetChips(1);
-                    return "CALL";
                 case "5":
                 case "6":
                 case "7":
-                    BetChips(1);
-                    return "BET";
                 case "8":
+                    return Bet();
                 case "9":
                 case "T":
-                    BetChips(1);
-                    return "BET";
+                    return Raise(25);
                 case "J":
                 case "Q":
+                    return Raise(50);
                 case "K":
-                    BetChips(3);
-                    return "BET:3";
+                    return Raise(250);
                 case "A":
-                    BetChips(5);
-                    return "BET:5";
-                default:
-                    throw new Exception("Invalid card");
+                    return Raise(1000);
             }
+            throw new Exception("Invalid card");
         }
 
-        private void BetChips(int chips)
+        private string Fold()
         {
-            Chips -= chips;
+            return "FOLD";
+        }
+
+        private string Bet()
+        {
+            Chips -= currentBet;
+            return "BET";
+        }
+
+        private string Call()
+        {
+            Chips -= currentBet;
+            return "CALL";
+        }
+
+        private string Raise(int chips)
+        {
+            currentBet += chips;
+
+            Chips -= currentBet;
+            return "BET:" + chips;
         }
 
         public void ReceiveChips(int chips)
         {
             Chips += chips;
-        }
-
-        public string Result()
-        {
-            if (Chips == StartingChips) return "DRAW";
-            return Chips > StartingChips ? "WIN" : "LOSE";
         }
     }
 }
