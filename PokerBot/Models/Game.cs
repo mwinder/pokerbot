@@ -71,23 +71,23 @@ namespace PokerBot
             {
                 case "2":
                 case "3":
-                    return Fold();
                 case "4":
                 case "5":
+                    return Fold();
                 case "6":
                 case "7":
                 case "8":
-                    return Bet();
                 case "9":
+                    return Bet();
                 case "T":
-                    return Raise(25);
                 case "J":
+                    return Raise(5);
                 case "Q":
-                    return Raise(50);
+                    return Raise(20);
                 case "K":
-                    return Raise(250);
+                    return Raise(100);
                 case "A":
-                    return Raise(1000);
+                    return Raise(2000);
             }
             throw new Exception("Invalid card");
         }
