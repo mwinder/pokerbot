@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using PokerBot.Models;
+using log4net;
+using PokerBot.Controllers;
 
-namespace PokerBot
+namespace PokerBot.Models
 {
     public class Game
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(PokerController));
+
         public string Opponent { get; private set; }
         public int StartingChips { get; private set; }
         public int Chips { get; private set; }
@@ -18,8 +21,6 @@ namespace PokerBot
 
         private string opponentCard;
         private string opponentMove;
-
-        private int currentBet = 2;
 
         public Game(string opponent, int chips, int handLimit)
         {
@@ -56,15 +57,12 @@ namespace PokerBot
             if (Regex.IsMatch(move, raisePattern))
             {
                 var raise = Convert.ToInt32(Regex.Replace(move, raisePattern, "$1"));
-                currentBet += raise;
+                Log.InfoFormat("Raised: " + raise);
             }
 
             return opponentMove = move;
         }
 
-        private int remainingBets = 20;
-
-        // FOLD, CALL, BET, BET:X
         public string Move()
         {
             switch (card.Id)
@@ -99,21 +97,16 @@ namespace PokerBot
 
         private string Bet()
         {
-            Chips -= currentBet;
             return "BET";
         }
 
         private string Call()
         {
-            Chips -= currentBet;
             return "CALL";
         }
 
         private string Raise(int chips)
         {
-            currentBet += chips;
-
-            Chips -= currentBet;
             return "BET:" + chips;
         }
 
