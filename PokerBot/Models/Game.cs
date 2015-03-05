@@ -59,24 +59,34 @@ namespace PokerBot
                 case "2":
                 case "3":
                 case "4":
+                    BetChips(1);
                     return "CALL";
                 case "5":
                 case "6":
                 case "7":
+                    BetChips(1);
                     return "BET";
                 case "8":
                 case "9":
                 case "T":
+                    BetChips(1);
                     return "BET";
                 case "J":
                 case "Q":
                 case "K":
+                    BetChips(3);
                     return "BET:3";
                 case "A":
+                    BetChips(5);
                     return "BET:5";
                 default:
                     throw new Exception("Invalid card");
             }
+        }
+
+        private void BetChips(int chips)
+        {
+            Chips -= chips;
         }
 
         public void ReceiveChips(int chips)
