@@ -22,6 +22,8 @@ namespace PokerBot.Models
         private string opponentCard;
         private string opponentMove;
 
+        private bool fold;
+
         public Game(string opponent, int chips, int handLimit)
         {
             Opponent = opponent;
@@ -58,6 +60,7 @@ namespace PokerBot.Models
             {
                 var raise = Convert.ToInt32(Regex.Replace(move, raisePattern, "$1"));
                 Log.InfoFormat("Raised: " + raise);
+                if (raise > 500 && card.Weighting < 10) fold = true;
             }
 
             return opponentMove = move;
@@ -65,6 +68,8 @@ namespace PokerBot.Models
 
         public string Move()
         {
+            if (fold) return Fold();
+
             switch (card.Id)
             {
                 case "2":
